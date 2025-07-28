@@ -1,0 +1,17 @@
+---
+alwaysApply: true
+---
+
+- prefer named exports
+- use pnpm
+- use tailwind css
+- refer to README.md for architectural and requirement considerations
+
+shadcn rules
+
+- these components are available to you:
+  accordion, alert, alert-dialog, aspect-ratio, avatar, badge, breadcrumb, button, calendar, card, carousel, chart, checkbox, collapsible, command, context-menu, dialog, drawer, dropdown-menu, form, hover-card, input, input-otp, label, menubar, navigation-menu, pagination, popover, progress, radio-group, resizable, scroll-area, select, separator, sheet, sidebar, skeleton, slider, sonner, switch, table, tabs, textarea, toggle, toggle-group, tooltip
+- you may use them if present in @/components. otherwise, add them with `pnpm dlx shadcn@latest add`
+- always import named exports from your local files, e.g. `import { Button } from "@/components/ui/button"`
+- use cn from @/lib/utils for merging classes. e.g. `import cn from '@/lib/utils'; className={cn("bg-white", "bg-red")}`
+- edit components freely. prefer changing theme tokens (CSS variables in your global CSS) and `components.json` `tailwind.baseColor` over ad‑hoc style tweaks to keep consistency.
