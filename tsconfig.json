@@ -19,6 +19,7 @@
       }
     ],
     "paths": {
+      "@/testutils/*": ["./test-utils/*"],
       "@/*": ["./src/*"]
     }
   },
