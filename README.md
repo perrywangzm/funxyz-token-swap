@@ -1,101 +1,53 @@
 # Crypto Token Price Explorer
 
-Tool feature for selecting tokens to swap with server-side API integration
+A modern web application for exploring token prices and performing token swaps with real-time price data from the @funkit/api-base package.
 
-## Requirements
+## Features
 
-### Functional
+### Core Functionality
 
 1. **Token Selection Interface**
 
-   - Allow users to select a source token from a predefined list
-   - Allow users to select a target token from a predefined list
-   - Display token symbols and names clearly
-   - Support at minimum: USDC (Chain 1), USDT (Chain 137), ETH (Chain 8453), WBTC (Chain 1)
+   - Interactive token autocomplete with search functionality
+   - Support for multiple chains (Ethereum, Polygon, Base)
+   - Comprehensive token list with metadata (name, symbol, chain ID, logo)
+   - Recommended tokens (USDC, USDT, ETH, WBTC) for quick access
+   - Token swap functionality with visual swap button
 
 2. **USD Amount Input**
 
-   - Provide an input field for users to enter a USD amount
-   - Validate input to ensure it's a positive number
-   - Support decimal values for precise amounts
+   - Real-time input validation with Zod schema
+   - Support for decimal values and comma formatting
+   - Live token amount estimates as you type
+   - Error handling for invalid inputs
 
 3. **Real-time Price Display**
 
-   - Fetch and display current token prices using the @funkit/api-base package
-   - Show the equivalent amount of source token for the entered USD value
-   - Show the equivalent amount of target token for the entered USD value
-   - Update prices in real-time or on user interaction
+   - Current token prices fetched from @funkit/api-base
+   - Live conversion rates between selected tokens
+   - Token amount calculations based on USD input
+   - Optimistic UI updates with loading states
 
 4. **API Integration**
 
-   - Integrate with @funkit/api-base package for token information via server actions
-   - Use getAssetErc20ByChainAndSymbol for token details
-   - Use getAssetPriceInfo for price data
-   - Handle API errors gracefully with user-friendly messages
+   - Server-side API integration with @funkit/api-base
    - Secure API key handling on the server side
+   - Caching layer for improved performance
+   - Graceful error handling with user-friendly messages
 
 5. **Token Information Display**
 
-   - Show token addresses and chain IDs
-   - Display token metadata (name, symbol, etc.)
-   - Present information in a clear, organized format
+   - Token metadata display (name, symbol, chain ID)
+   - Token logos with fallback icons
+   - Network-specific information
+   - Clear visual distinction between source and target tokens
 
 6. **User Experience Features**
-   - Clear visual distinction between source and target tokens
-   - Intuitive layout following the provided wireframe
-   - Responsive design for different screen sizes
+   - Responsive design optimized for all screen sizes
    - Loading states during API calls
-   - Optimistic UI updates with server-side validation
-
-### Non-functional
-
-1. **Performance**
-
-   - Fast initial page load (< 3 seconds)
-   - Responsive UI interactions (< 100ms)
-   - Efficient API calls with proper caching
-   - Optimized bundle size with Next.js optimizations
-
-2. **Usability**
-
-   - Intuitive user interface following modern UX patterns
-   - Clear visual hierarchy and information architecture
-   - Accessible design (WCAG 2.1 AA compliance)
-   - Mobile-responsive design
-
-3. **Reliability**
-
-   - Graceful error handling for API failures
-   - Fallback states for missing data
-   - Input validation to prevent invalid operations
-   - Consistent behavior across different browsers
-
-4. **Maintainability**
-
-   - Clean, well-structured React components
-   - Proper separation of concerns with server/client components
-   - Comprehensive error handling
-   - Well-documented code
-
-5. **Security**
-
-   - Secure API key handling on the server side
-   - Input sanitization to prevent XSS
-   - HTTPS-only communication with APIs
-   - Server-side validation of all inputs
-
-6. **Scalability**
-
-   - Modular component architecture
-   - Easy to add new tokens to the supported list
-   - Extensible design for future features
-   - Efficient state management with React Server Components
-
-7. **Technical Requirements**
-   - Built with Next.js 15 App Router
-   - Modern browser compatibility (Chrome, Firefox, Safari, Edge)
-   - TypeScript for type safety
-   - Proper build and deployment setup
+   - Toast notifications for errors and feedback
+   - Intuitive token selection with search and filtering
+   - Disabled state for already selected tokens
 
 ## Tech Stack
 
@@ -107,40 +59,38 @@ Tool feature for selecting tokens to swap with server-side API integration
 
 ### State Management
 
-- **React Server Components** - Server-side state management
-- **React Hooks** - Client-side state management for UI interactions
-- **Server Actions** - Form handling and API integration
+- **Zustand** - Lightweight state management for client-side state
+- **React Hooks** - Local component state management
 
-### Styling
+### Styling & UI
 
-- **Tailwind CSS 4** - Utility-first CSS framework for responsive design
-
-### Form Handling & Validation
-
-- **React Hook Form** - Efficient form management with minimal re-renders
-- **Zod** - Schema validation and runtime type checking
-- **Server Actions** - Server-side form processing and validation
+- **Tailwind CSS 4** - Utility-first CSS framework
+- **shadcn/ui** - Modern, accessible UI components built on Radix UI
+- **Lucide React** - Consistent icon library
+- **Radix UI** - Headless UI primitives for accessibility
 
 ### Data Fetching & Caching
 
-- **Next.js Server Actions** - Server-side API integration
+- **Next.js API Routes** - Server-side API endpoints
 - **@funkit/api-base** - Crypto token API integration
-- **Next.js Cache** - Built-in caching for API responses
+- **Custom TTL Cache** - Client-side caching for API responses
+- **Next.js Cache Headers** - Server-side caching
 
-### UI Components & Icons
+### Form Handling & Validation
 
-- **shadcn/ui** - Modern, accessible UI components built on Radix UI and Tailwind CSS
-- **Lucide React** - Consistent icon library
+- **Zod** - Schema validation and runtime type checking
+- **Custom validation** - Real-time input validation
 
 ### Utilities
 
 - **clsx** - Conditional CSS class names
-- **date-fns** - Date formatting utilities
+- **lodash** - Utility functions (debounce)
+- **tailwind-merge** - Tailwind class merging
 
 ### Development Tools
 
 - **ESLint** - Code linting
-- **Prettier** - Code formatting
+- **Jest** - Testing framework
 - **pnpm** - Package manager
 - **Turbopack** - Fast development server
 
@@ -149,108 +99,227 @@ Tool feature for selecting tokens to swap with server-side API integration
 ```mermaid
 graph TB
     subgraph Client["Client Components"]
-        TPS[Token Pair Selector - Source/target selection, token dropdowns, USD input]
-        TVV[Token Value Viewer - Price display, token amounts, real-time updates]
+        TPE[TokenPriceExplorer - Main component]
+        TA[TokenAutocomplete - Token selection with search]
+        AI[AmountInput - USD amount input with validation]
+        CR[ConversionRates - Price display and calculations]
     end
 
-    subgraph Server["Server&nbsp;Components&nbsp;&&nbsp;Actions"]
-        SA[Server Actions - API integration, form processing, validation]
-        SC[Server Components - Initial data fetching, SEO optimization]
+    subgraph State["State Management"]
+        TS[TokenStore - Zustand store for app state]
+        TH[useTokenStore - Hook for store access]
+        TI[useTokenInit - Initialization hook]
     end
 
-    subgraph API["API Services"]
-        TLS[Token List & Price Service - getAssetErc20ByChainAndSymbol, getAssetPriceInfo, error handling]
+    subgraph API["API Layer"]
+        AR[API Routes - Next.js API endpoints]
+        AS[Asset Service - Price data integration]
+        TLS[TokenList Service - Token metadata]
     end
 
-    subgraph Models["Data Models"]
-        GAPIR[GetAssetPriceInfoResponse - Price data structure, API response format]
-        EAI[Erc20AssetInfo - Token metadata, chain information]
+    subgraph External["External APIs"]
+        FUNKIT["@funkit/api-base - Token price API"]
+    end
+
+    subgraph Data["Data Layer"]
+        TD[Token Data - Hardcoded token list]
+        TC[TTL Cache - Client-side caching]
+        TM[Token Models - TypeScript interfaces]
     end
 
     %% User interactions
-    TPS -->|"User selects tokens & enters USD amount"| SA
-    TVV -->|"Displays calculated token amounts"| SA
+    TPE -->|"User interactions"| TS
+    TA -->|"Token selection"| TS
+    AI -->|"Amount changes"| TS
 
-    %% Server interactions
-    SA -->|"Triggers API calls for token data"| TLS
-    SA -->|"Triggers API calls for price data"| TLS
+    %% State to API
+    TS -->|"API requests"| AR
+    AR -->|"Service calls"| AS
+    AR -->|"Service calls"| TLS
 
-    %% Service to models
-    TLS -->|"Returns typed price response"| GAPIR
-    TLS -->|"Returns typed token metadata"| EAI
+    %% API to external
+    AS -->|"Price data"| FUNKIT
+    TLS -->|"Token metadata"| TD
 
-    %% Models to server
-    GAPIR -->|"Updates server with price data"| SA
-    EAI -->|"Updates server with token info"| SA
+    %% Data flow
+    FUNKIT -->|"Price responses"| AS
+    AS -->|"Cached data"| TC
+    TC -->|"Cached responses"| TS
 
-    %% Server to client updates
-    SA -->|"Triggers UI price updates"| TVV
-    SA -->|"Triggers UI token updates"| TPS
-
-    %% Server Components for initial load
-    SC -->|"Initial data fetching"| TLS
+    %% UI updates
+    TS -->|"State updates"| TPE
+    TS -->|"State updates"| TA
+    TS -->|"State updates"| AI
+    TS -->|"State updates"| CR
 
     style Client fill:#e1f5fe,stroke:#000,color:#000
-    style Server fill:#f3e5f5,stroke:#000,color:#000
+    style State fill:#f3e5f5,stroke:#000,color:#000
     style API fill:#e8f5e8,stroke:#000,color:#000
-    style Models fill:#fff3e0,stroke:#000,color:#000
+    style External fill:#fff3e0,stroke:#000,color:#000
+    style Data fill:#fce4ec,stroke:#000,color:#000
 ```
 
-### Module Interactions
+### Module Structure
 
-1. **Client Layer**
-
-   - **Token Pair Selector**: Handles user token selection and displays available tokens
-   - **Token Value Viewer**: Displays current prices and calculated values based on USD input
-
-2. **Server Layer**
-
-   - **Server Actions**: Handle form submissions and API integration
-     - Secure API key management
-     - Server-side validation
-     - Error handling and user feedback
-   - **Server Components**: Initial data fetching and SEO optimization
-     - Pre-fetch token metadata
-     - Optimize for search engines
-     - Reduce client-side JavaScript
-
-3. **API Service Layer**
-
-   - **Token List & Price Service**: API integration with @funkit/api-base
-     - `getAssetErc20ByChainAndSymbol`: Fetches token metadata
-     - `getAssetPriceInfo`: Retrieves current price information
-     - Server-side caching for performance
-
-4. **Data Models**
-   - **GetAssetPriceInfoResponse**: Type definition for price API responses
-   - **Erc20AssetInfo**: Type definition for token metadata
+```
+src/
+├── app/
+│   ├── api/
+│   │   ├── assets/
+│   │   │   ├── route.ts              # Asset price API endpoint
+│   │   │   ├── assets.service.ts     # Price data service
+│   │   │   └── erc20/
+│   │   │       └── route.ts          # ERC20 token metadata endpoint
+│   │   └── tokenlist/
+│   │       ├── route.ts              # Token list API endpoint
+│   │       ├── tokenlist.service.ts  # Token list service
+│   │       ├── tokenlist.data.ts     # Hardcoded token data
+│   │       └── recommended/
+│   │           └── route.ts          # Recommended tokens endpoint
+│   ├── page.tsx                      # Main page component
+│   └── layout.tsx                    # App layout
+├── modules/
+│   └── tokens/
+│       ├── TokenPriceExplorer.tsx    # Main token explorer component
+│       ├── components/
+│       │   ├── TokenAutocomplete.tsx # Token selection component
+│       │   ├── AmountInput.tsx       # USD amount input
+│       │   ├── ConversionRates.tsx   # Price conversion display
+│       │   └── NetworkImage.tsx      # Token logo component
+│       ├── hooks/
+│       │   ├── useTokenStore.ts      # Store access hook
+│       │   └── useTokenInit.ts       # Initialization hook
+│       ├── store/
+│       │   └── tokenStore.ts         # Zustand store
+│       └── services/
+│           ├── assets.ts             # Asset API client
+│           └── tokenlist.ts          # Token list API client
+├── models/
+│   └── token.ts                      # Token data models
+├── lib/
+│   ├── cache.ts                      # TTL cache implementation
+│   ├── utils.ts                      # Utility functions
+│   └── toast.ts                      # Toast notifications
+└── config/
+    └── server.ts                     # Server configuration
+```
 
 ### Data Flow
 
-1. **Initial Load**: Server Components fetch initial data → API Service → UI renders with data
-2. **Token Selection**: User selects tokens → Server Action processes → API Service fetches new data → UI updates
-3. **Price Updates**: Server Action triggers price refresh → API Service calls API → UI displays latest values
-4. **Form Submission**: User submits form → Server Action validates → API Service processes → UI shows results
+1. **Initialization**: `useTokenInit` fetches recommended tokens → Store updates → UI renders
+2. **Token Selection**: User selects token → Store updates → API fetches price data → UI updates
+3. **Amount Input**: User enters USD amount → Validation → Store updates → UI recalculates
+4. **Price Updates**: Store triggers price refresh → API calls → Cache updates → UI displays latest values
 
-### Key Next.js Features Used
+### Key Features
 
-1. **App Router**: File-based routing with server and client components
-2. **Server Actions**: Secure server-side form processing and API integration
-3. **Server Components**: Initial data fetching and SEO optimization
-4. **Client Components**: Interactive UI elements with client-side state
-5. **Built-in Caching**: Automatic caching of API responses and static assets
-6. **TypeScript Integration**: Full type safety across server and client code
+1. **Caching Strategy**
 
-### Security Benefits
+   - Client-side TTL cache for API responses
+   - Server-side cache headers for static data
+   - Optimized for performance and reduced API calls
 
-1. **API Key Protection**: API keys stored securely on the server side
-2. **Server-side Validation**: All inputs validated before processing
-3. **XSS Prevention**: Automatic sanitization of user inputs
-4. **CSRF Protection**: Built-in protection against cross-site request forgery
+2. **Error Handling**
 
-### Performance Benefits
+   - Comprehensive error boundaries
+   - User-friendly error messages
+   - Graceful fallbacks for missing data
 
-1. **Reduced Bundle Size**: Server components reduce client-side JavaScript
-2. **Faster Initial Load**: Server-side rendering provides immediate content
-3. **Automatic Caching**: Next.js handles caching of API responses
-4. **Optimized Assets**: Automatic image and asset optimization
+3. **Performance Optimizations**
+
+   - Debounced search for token autocomplete
+   - Optimistic UI updates
+   - Efficient re-rendering with Zustand
+   - Next.js optimizations (Turbopack, caching)
+
+4. **Security**
+   - API keys stored securely on server side
+   - Input validation and sanitization
+   - HTTPS-only communication
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- pnpm package manager
+
+### Installation
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd token-swap-nextjs
+
+# Install dependencies
+pnpm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Add your FUNKIT_API_KEY to .env.local
+
+# Start development server
+pnpm dev
+```
+
+### Environment Variables
+
+```env
+FUNKIT_API_KEY=your_api_key_here
+```
+
+### Available Scripts
+
+- `pnpm dev` - Start development server with Turbopack
+- `pnpm build` - Build for production
+- `pnpm start` - Start production server
+- `pnpm lint` - Run ESLint
+- `pnpm test` - Run Jest tests
+
+## API Endpoints
+
+### `/api/assets`
+
+- **GET**: Fetch asset price information
+- **Parameters**: `assetTokenAddress`, `chainId`
+- **Response**: Asset price data with unit price and amounts
+
+### `/api/assets/erc20`
+
+- **GET**: Fetch ERC20 token metadata
+- **Parameters**: `chainId`, `symbol`
+- **Response**: Token metadata including address and decimals
+
+### `/api/tokenlist`
+
+- **GET**: Fetch filtered token list
+- **Parameters**: `query`, `limit`, `offset`
+- **Response**: Paginated token list with metadata
+
+### `/api/tokenlist/recommended`
+
+- **GET**: Fetch recommended tokens
+- **Response**: Curated list of popular tokens
+
+## Testing
+
+The project includes comprehensive testing setup with:
+
+- Jest for unit testing
+- React Testing Library for component testing
+- Test utilities for common testing patterns
+
+Run tests with:
+
+```bash
+pnpm test
+```
+
+## Deployment
+
+The application is optimized for deployment on Vercel with:
+
+- Next.js App Router for optimal performance
+- Server-side rendering for SEO
+- Automatic static optimization
+- Edge runtime support for API routes
